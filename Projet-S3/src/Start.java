@@ -1,15 +1,13 @@
 import java.io.File;
-import java.io.PrintWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JFileChooser;
-import javax.swing.UIManager;
 import javax.swing.filechooser.FileFilter;
 
 class Start {
 	
-	// Un joli JFileChooser pompé sur le net (ça en ouvre 2 ya un pb)
+	// Objectifs
+	// D'ici la fin du mois ce serait cool de pouvoir afficher les objets en "fil de fer"
 	
     public static void main(String[] arg) throws IOException {
     	
@@ -21,26 +19,31 @@ class Start {
 	FileFilter jar = new FiltreSimple("Fichiers JAR",".jar");
 	
 	
-		JFileChooser dialogue = new JFileChooser(new File("."));
+		JFileChooser dialogue = new JFileChooser();
 		dialogue.addChoosableFileFilter(java);
 		dialogue.addChoosableFileFilter(classes);
 		dialogue.addChoosableFileFilter(jar);
 		dialogue.addChoosableFileFilter(text);
 		dialogue.showOpenDialog(null);
 		
-		
-		PrintWriter sortie;
 		File fichier;
+
+		fichier = dialogue.getSelectedFile();
 		
-		if (dialogue.showOpenDialog(null)== 
-		    JFileChooser.APPROVE_OPTION) {
-			
-			
-		    fichier = dialogue.getSelectedFile();
-		    sortie = new PrintWriter
-			(new FileWriter(fichier.getPath(), true));
-		    sortie.println(arg[0]);
-		    sortie.close();
+		// Test : la reconnaissance de l'extension fonctionne
+		String extension = fichier.getName().substring(fichier.getName().length()-4, fichier.getName().length());
+		System.out.println("Le fichier a pour extension : " + extension);
+		System.out.println("Et il se nomme : " + fichier.getName());
+		
+		// A remplacer par if (extension.equals(".gts")) { ..... }
+		if (extension.equals(".txt")) {
+			System.out.println("Le fichier est bien un fichier .txt");
 		}
+		
+		else {
+			System.out.println("Ah non mon con, ce n'est pas un fichier .txt");
+		}
+
     }
+    
 }
