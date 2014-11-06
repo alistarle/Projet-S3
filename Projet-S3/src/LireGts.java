@@ -1,3 +1,6 @@
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,7 +25,7 @@ import javax.swing.filechooser.FileFilter;
  * Et afficher les points 8-)
  * 
  */
-class Start {
+class LireGts {
 	
 	static Map <Integer, Sommet> mapSom;
 	static Map <Integer, Segment> mapSeg;
@@ -59,15 +62,26 @@ class Start {
 		if (estGts) { 
 			List <Sommet> sommets = listerSommet(fichier);
 			int nbSommets = sommets.size();
-			System.out.println("Le modele presente : " + nbSommets + " sommets.");
 			mapSom = mapSommet(sommets);
-			afficherSommets();
 			
 			List <Segment> segments = listerSegment (fichier);
 			int nbSegments = segments.size();
-			System.out.println("Le modele presente : " + nbSegments + " segments.");
 			mapSeg = mapSegment(segments);
-			afficherSegments();
+			
+			// Test repere
+			Fenetre f = new Fenetre();
+			Panneau p = new Panneau ();
+			
+			Graphics g = f.getGraphics();
+			
+			Sommet theSommet1 = new Sommet (500.0,500.0,500.0);
+			Sommet theSommet2 = new Sommet (400.0,400.0,400.0);
+			
+			p.paint(theSommet1, theSommet2, g);
+			f.setContentPane(p);
+			p.repaint();
+			f.repaint();
+			
 		}
 
     }
@@ -128,8 +142,7 @@ class Start {
 			      }
 			      i = i+1;
 			}
-			
-			 // System.out.println("On a " + listeSommet.size() + " sommets");
+		
     		  
 		} catch (IOException e) {
 			System.out.println("Comme c'etait difficile. Mais t'as quand meme echoue.");
@@ -221,15 +234,15 @@ class Start {
 				    				  Integer indice2 = tmp [1];
 				    				  
 				    				 // System.out.println("Indice 1 " + indice1);
-				    				  Integer x1 = mapSom.get(indice1-1).getX();
-				    				  Integer y1 = mapSom.get(indice1-1).getY();
-				    				  Integer z1 = mapSom.get(indice1-1).getZ();
+				    				  double x1 = mapSom.get(indice1-1).getX();
+				    				  double y1 = mapSom.get(indice1-1).getY();
+				    				  double  z1 = mapSom.get(indice1-1).getZ();
 				    				  Sommet s1 = new Sommet (x1,y1,z1);
 				    				  
 				    				  //System.out.println("Indice 2  : " + indice2);
-				    				  Integer x2 = mapSom.get(indice2-1).getX();
-				    				  Integer y2 = mapSom.get(indice2-1).getY();
-				    				  Integer z2 = mapSom.get(indice2-1).getZ();
+				    				  double x2 = mapSom.get(indice2-1).getX();
+				    				  double y2 = mapSom.get(indice2-1).getY();
+				    				  double z2 = mapSom.get(indice2-1).getZ();
 				    				  Sommet s2 = new Sommet (x2,y2,z2);
 				    				  
 				    				  
@@ -273,10 +286,6 @@ class Start {
 	 */
 	public static Map <Integer, Segment> mapSegment (List <Segment>l) {
 
-
-		
-		
-		
 		Map <Integer,Segment> mapRes = new HashMap <Integer, Segment> ();
 		Integer i = 0;
 		Iterator <Segment> it = (Iterator<Segment>) l.iterator();
