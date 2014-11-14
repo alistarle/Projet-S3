@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileFilter;
@@ -47,6 +48,7 @@ class LireGts {
 		}
 
 		if (estGts) {
+			mapSeg = new HashMap <Integer,Segment>();
 			List<Sommet> sommets = listerSommet(fichier);
 			int nbSommets = sommets.size();
 			mapSom = mapSommet(sommets);
@@ -60,8 +62,6 @@ class LireGts {
 			List<Face> faces = listerFaces(fichier);
 			int nbFaces = faces.size();
 			mapFaces = mapFace(faces);
-			
-			
 			afficherFaces();
 
 		}
@@ -342,9 +342,6 @@ class LireGts {
 			}
 
 			if (estDansFaces) {
-				Integer tok = 0;
-				int cpt= 0;
-				int nbSeg = 0;
 				int cptFaces = 0;
 				while (ligne!=null) {
 					int cptChiffre = 0;
@@ -409,17 +406,12 @@ class LireGts {
 								System.out.println("On a " + cptFaces + " faces.");
 							}
 
-						}
-					
+						}	
 					}
 					System.out.println("Fin, ligne = " + ligne);
 					ligne = lecteurAvecBuffer.readLine();
 				}
-
-			
-
-			
-				
+	
 			}
 
 		} catch (IOException e) {
@@ -459,7 +451,8 @@ class LireGts {
 	public static void afficherFaces() {
 		System.out.println("Les faces : ");
 		for (int i = 0; i < mapFaces.size(); i++) {
-			System.out.println((i + 1) + " : " + mapFaces.get(i).toString());
+			System.out.println((i + 1) + " Faces : " + indiceSegment(mapFaces.get(i).getA()) +  " " +indiceSegment(mapFaces.get(i).getB()) + " " +indiceSegment(mapFaces.get(i).getC()));
+	
 		}
 	}
 
@@ -468,10 +461,22 @@ class LireGts {
 		for (int i = 0; i < s.length(); i++) {
 			if (s.charAt(i) != ' ') {
 				d = d + s.charAt(i);
-			} else {
-				// System.out.println("espace trouve");
 			}
 		}
 		return d;
 	}
+	
+	public static Integer indiceSegment (Segment s) {
+		
+		for ( Map.Entry<Integer,Segment> entry : mapSeg.entrySet()) {
+		    Integer ind = entry.getKey();
+		    Segment  seg = entry.getValue();
+		    if (seg.equals(s)) {
+		    	return ind + 1;
+		    }
+
+		}
+		return null;
+	}
+
 }
