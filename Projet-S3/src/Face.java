@@ -6,6 +6,12 @@
 
 public class Face {
 
+	@Override
+	public String toString() {
+		return "Face [a=" + a + ", b=" + b + ", c=" + c + ", estVisible="
+				+ estVisible + "]";
+	}
+
 	Segment a;
 	Segment b;
 	Segment c;
