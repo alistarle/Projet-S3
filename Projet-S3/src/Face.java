@@ -34,6 +34,9 @@ public class Face {
 		// Test encore a faire
 	}
 
+
+	
+	
 	/**
 	 * Retourne le 1er Segment d'une face
 	 * @return
