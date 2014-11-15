@@ -1,8 +1,5 @@
-/**
- * 
- * @author MineState
- *
- */
+package package_util;
+import package_exception.SegmentException;
 
 public class Segment {
 	
@@ -13,10 +10,14 @@ public class Segment {
 	 * Construit un Segment a partir de 2 Sommet
 	 * @param a : le 1er sommet
 	 * @param b : le second sommet
+	 * @throws SegmentException 
 	 */
-	public Segment (Sommet a, Sommet b) {
+	public Segment (Sommet a, Sommet b) throws SegmentException {
 		this.a = a;
 		this.b = b;
+		if (a.equals(b)) {
+			throw new SegmentException("Les deux sommets ne peuvent être identiques.");
+		}
 	}
 
 	/**

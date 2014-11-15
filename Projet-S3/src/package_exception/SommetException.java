@@ -1,3 +1,4 @@
+package package_exception;
 
 public class SommetException {
 
