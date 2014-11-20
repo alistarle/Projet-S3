@@ -1,4 +1,5 @@
 package package_util;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,46 +16,42 @@ import javax.swing.filechooser.FileFilter;
 
 import package_exception.FichierException;
 import package_exception.SegmentException;
+import package_exception.SommetException;
 
 class LireGts {
 
 	/**
-	 * Stockent les sommets, les segments, et les faces du fichier .gts dans l'ordre
+	 * Stockent les sommets, les segments, et les faces du fichier .gts dans
+	 * l'ordre
 	 */
 	static Map<Integer, Sommet> mapSom;
 	static Map<Integer, Segment> mapSeg;
 	static Map<Integer, Face> mapFaces;
-	
+
 	/**
 	 * Valeurs théoriques inscrites sur la premiere ligne du fichier .gts
 	 */
 	static int nbFaces;
 	static int nbSommets;
 	static int nbSegments;
-	
+
 	/**
 	 * Valeurs reelles calculees
 	 */
 	static int nbFacesReel;
 	static int nbSommetsReel;
 	static int nbSegmentsReel;
-	
-	
-	
-	
-	
+
 	/**
-	 * Dans l'ordre, on y fait : 
-	 * - selection d'un fich
+	 * Dans l'ordre, on y fait : - selection d'un fich
+	 * 
 	 * @param arg
 	 * @throws IOException
 	 * @throws FichierException
 	 */
+
 	public static void main(String[] arg) throws IOException, FichierException {
 
-	
-		
-		
 		FileFilter gts = new FiltreSimple("Fichiers GTS", ".gts");
 
 		// Creation et instanciation d'un JFileChooser
@@ -83,9 +80,9 @@ class LireGts {
 		if (estGts) {
 			mapSeg = new HashMap<Integer, Segment>();
 			List<Sommet> sommets = listerSommet(fichier);
-			
+
 			mapSom = mapSommet(sommets);
-			
+
 			afficherSommets();
 
 			List<Segment> segments = listerSegment(fichier);
@@ -98,21 +95,27 @@ class LireGts {
 			mapFaces = mapFace(faces);
 			afficherFaces();
 
-			Integer [] t = nbPointsSegmentsFaces(fichier);
+			Integer[] t = nbPointsSegmentsFaces(fichier);
 			nbSommets = t[0];
 			nbSegments = t[1];
 			nbFaces = t[2];
-			
-			System.out.println("En theorie, le modele comporte " + nbSommets + " sommets " + nbSegments + " segments " + nbFaces + " faces");
+
+			System.out.println("En theorie, le modele comporte " + nbSommets
+					+ " sommets " + nbSegments + " segments " + nbFaces
+					+ " faces");
 			nbSommetsReel = mapSom.size();
 			nbSegmentsReel = mapSeg.size();
 			nbFacesReel = mapFaces.size();
-			System.out.println("D'apres nos calculs, le modele comporte " + nbSommetsReel + " sommets " + nbSegmentsReel + " segments " + nbFacesReel + " faces");
-			
-			if (nbSommets != nbSommetsReel || nbSegments != nbSegmentsReel || nbFaces != nbFacesReel ) {
-				throw new FichierException("Le nombre de sommets indiques, et ou de segments, et ou de faces est errone.");
+			System.out.println("D'apres nos calculs, le modele comporte "
+					+ nbSommetsReel + " sommets " + nbSegmentsReel
+					+ " segments " + nbFacesReel + " faces");
+
+			if (nbSommets != nbSommetsReel || nbSegments != nbSegmentsReel
+					|| nbFaces != nbFacesReel) {
+				throw new FichierException(
+						"Le nombre de sommets indiques, et ou de segments, et ou de faces est errone.");
 			}
-			
+
 		}
 
 	}
@@ -147,17 +150,16 @@ class LireGts {
 			while (ligne != null && (!ligne.equals(delimiteur))) {
 
 				char[] tabLigne = ligne.toCharArray();
-				
-				
+
 				for (int i = 0; i < tabLigne.length; i++) {
 					if (ligne.charAt(0) == '#') {
 						ligne = lecteurAvecBuffer.readLine();
 						System.out.println("# trouve !");
 					}
-					
+
 					else {
 						String s = tabLigne[i] + "";
-						
+
 						if (!s.equals(" ")) {
 							maListe.add(tabLigne[i] + "");
 						}
@@ -166,20 +168,24 @@ class LireGts {
 							maListe.add(null);
 						}
 					}
-				
 
 				}
-				
-				Sommet s = sommetDepuisCoordonnees(maListe);
+
+				Sommet s =null;
+				try {
+					s = sommetDepuisCoordonnees(maListe);
+				} catch (SommetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				listeSommet.add(s);
-				//System.out.println("Liste = " + maListe.toString());
 				maListe.clear();
 				ligne = lecteurAvecBuffer.readLine();
-			
-			} 
+
+			}
 
 		} catch (IOException e) {
-			System.out.println("Probleme");
+			System.out.println("listerSommet : probleme");
 			e.printStackTrace();
 		}
 
@@ -239,9 +245,8 @@ class LireGts {
 			boolean estDansSegment = false;
 			ligne = lecteurAvecBuffer.readLine();
 			char espace = ' ';
-			
+
 			while (ligne != null && !ligne.equals(delimiteurFace)) {
-				
 
 				if (ligne.equals(delimiteurSegment)) {
 					estDansSegment = true;
@@ -253,15 +258,17 @@ class LireGts {
 				}
 
 				if (estDansSegment) {
-
+		
 					char[] tabLigne = ligne.toCharArray();
 
 					for (int i = 0; i < tabLigne.length; i++) {
+			
 
 						String s = tabLigne[i] + "";
 						if (tabLigne[i] != espace) {
 							Integer a = Integer.parseInt(s);
 							maListe.add(a);
+							
 						}
 
 						else {
@@ -269,6 +276,7 @@ class LireGts {
 						}
 
 					}
+			
 					Segment s = segmentDepuisIndexSommet(maListe);
 					listeSegment.add(s);
 					maListe.clear();
@@ -317,7 +325,6 @@ class LireGts {
 		return mapRes;
 	}
 
-
 	/*
 	 * Cette methode affiche les sommets avec leur indice dans la MapSom
 	 */
@@ -338,10 +345,8 @@ class LireGts {
 	public static List<Face> listerFaces(File fichier) {
 
 		List<Face> listeFaces = new ArrayList<Face>();
-
 		BufferedReader lecteurAvecBuffer = null;
 		String ligne;
-
 		try {
 			lecteurAvecBuffer = new BufferedReader(new FileReader(fichier));
 		}
@@ -356,46 +361,33 @@ class LireGts {
 			boolean estDansFaces = false;
 			char espace = ' ';
 			ligne = lecteurAvecBuffer.readLine();
-
 			while (!estDansFaces && ligne != null) {
-	
-
 				if (ligne.equals(delimiteur)) {
-					System.out.println("Ligne == delimiteur ! ");
 					estDansFaces = true;
 				}
 				ligne = lecteurAvecBuffer.readLine();
-
 			}
 
-			// la
 			if (estDansFaces) {
-				System.out.println("dans faces");
 				List<Integer> maListe = new ArrayList<Integer>();
-
 				while (ligne != null) {
-
 					char[] tabLigne = ligne.toCharArray();
-
 					for (int i = 0; i < tabLigne.length; i++) {
-
 						String s = tabLigne[i] + "";
 						if (tabLigne[i] != espace) {
 							Integer a = Integer.parseInt(s);
 							maListe.add(a);
 						}
-
 						else {
 							maListe.add(null);
 						}
-
 					}
 					Face f = faceDepuisIndexSegment(maListe);
+				
 					listeFaces.add(f);
 					maListe.clear();
 					ligne = lecteurAvecBuffer.readLine();
 				}
-
 			}
 
 		} catch (IOException e) {
@@ -432,9 +424,12 @@ class LireGts {
 		return mapRes;
 	}
 
+	/**
+	 * Affiche les faces du modele. Donne les numeros des 3 segments associes.
+	 */
 	public static void afficherFaces() {
 		System.out.println("Les faces : ");
-		for (int i = 0; i < mapFaces.size(); i++) {
+		for (int i = 0; i < mapFaces.size(); i++) {		
 			System.out.println((i + 1) + " Faces : "
 					+ indiceSegment(mapFaces.get(i).getA()) + " "
 					+ indiceSegment(mapFaces.get(i).getB()) + " "
@@ -442,6 +437,10 @@ class LireGts {
 
 		}
 	}
+
+	/**
+	 * Affiche les segments du modele. Donne les numeros des 2 sommets associes.
+	 */
 	public static void afficherSegments() {
 		System.out.println("Les segments : ");
 		for (int i = 0; i < mapSeg.size(); i++) {
@@ -452,17 +451,12 @@ class LireGts {
 		}
 	}
 
-	public static String supprimeSpace(String s) {
-		String d = "";
-		for (int i = 0; i < s.length(); i++) {
-			if (s.charAt(i) != ' ') {
-				d = d + s.charAt(i);
-			}
 
-		}
-		return d;
-	}
-
+	/**
+	 * Donne l'indice d'un segment s
+	 * @param s : le segment dont on veut connaitre l'indice dans la mapSeg
+	 * @return son indice dans la mapSeg
+	 */
 	public static Integer indiceSegment(Segment s) {
 
 		for (Map.Entry<Integer, Segment> entry : mapSeg.entrySet()) {
@@ -475,7 +469,12 @@ class LireGts {
 		}
 		return null;
 	}
-	
+
+	/**
+	 * Donne l'idice d'un sommet s
+	 * @param s : le sommet dont on veut connnaitre l'indice dans la mapSom
+	 * @return : son indice dans la mapSom
+	 */
 	public static Integer indiceSommet(Sommet s) {
 
 		for (Map.Entry<Integer, Sommet> entry : mapSom.entrySet()) {
@@ -489,20 +488,18 @@ class LireGts {
 		return null;
 	}
 
+	
 	public static Face faceDepuisIndexSegment(List<Integer> list) {
 
 		String s = "";
 		Integer[] tab = new Integer[3];
 		int cpt = 0;
-
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i) != null) {
 				s = s + "" + list.get(i);
 			}
-
 			if (list.get(i) == null || i == list.size() - 1) {
 				String b = s.trim();
-
 				Integer a = Integer.parseInt(b);
 				tab[cpt] = a;
 				cpt++;
@@ -512,17 +509,30 @@ class LireGts {
 		}
 
 		try {
-			if (verifieIndiceSegment(tab[0] - 1)
-					&& verifieIndiceSegment(tab[1] - 1)
-					&& verifieIndiceSegment(tab[2] - 1)) {
-				Segment s1 = mapSeg.get(tab[0] - 1);
-				Segment s2 = mapSeg.get(tab[1] - 1);
-				Segment s3 = mapSeg.get(tab[2] - 1);
+			Segment s1 = null;
+			Segment s2 = null;
+			Segment s3 = null;
+			
+			if (verifieIndiceSegment(tab[0] - 1)) {
+					s1 = mapSeg.get(tab[0] - 1);
+
+				if (verifieIndiceSegment(tab[2] - 1)) {
+					s2 = mapSeg.get(tab[1] - 1);
+				}
+				if (verifieIndiceSegment(tab[2] - 1)) {
+					 s3 = mapSeg.get(tab[2] - 1);
+					 
+				}
+				
+				else {
+					throw new SegmentException("La face issue de " + list.toString() + " n'a pu etre construite. Un des segments indique n'est pas dans la base");
+				}
+			}
+			
 				Face f = new Face(s1, s2, s3);
 				return f;
-			}
+
 		} catch (SegmentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -530,6 +540,8 @@ class LireGts {
 
 	}
 
+	
+	
 	public static boolean verifieIndiceSegment(Integer indice)
 			throws SegmentException {
 		if (mapSeg.containsKey(indice)) {
@@ -537,8 +549,21 @@ class LireGts {
 		}
 
 		else {
-			//throw new SegmentException(indice);
-			System.out.println("lala");
+
+			return false;
+
+		}
+
+	}
+	
+	public static boolean verifieIndiceSommet(Integer indice)
+			throws SegmentException {
+		if (mapSom.containsKey(indice)) {
+			return true;
+		}
+
+		else {
+
 			return false;
 
 		}
@@ -550,15 +575,12 @@ class LireGts {
 		String s = "";
 		Integer[] tab = new Integer[2];
 		int cpt = 0;
-
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i) != null) {
 				s = s + "" + list.get(i);
 			}
-
 			if (list.get(i) == null || i == list.size() - 1) {
 				String b = s.trim();
-
 				Integer a = Integer.parseInt(b);
 				tab[cpt] = a;
 				cpt++;
@@ -576,25 +598,23 @@ class LireGts {
 			System.out.println("La création du segment a échoué.");
 			e.printStackTrace();
 		}
-		
+
 		return sf;
 
 	}
 
-	public static Sommet sommetDepuisCoordonnees(List<String> list) {
-
+	public static Sommet sommetDepuisCoordonnees(List<String> list) throws SommetException {
+		int cptCoordonnees = 0;
 		String s = "";
 		double[] tab = new double[3];
 		int cpt = 0;
-
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i) != null) {
 				s = s + "" + list.get(i);
 			}
-
 			if (list.get(i) == null || i == list.size() - 1) {
+				cptCoordonnees ++;
 				String b = s.trim();
-
 				double a = Double.parseDouble(b);
 				tab[cpt] = a;
 				cpt++;
@@ -602,19 +622,24 @@ class LireGts {
 			}
 
 		}
-
+		
+	
 		double s1 = tab[0];
 		double s2 = tab[1];
 		double s3 = tab[2];
+		
 		Sommet sf = new Sommet(s1, s2, s3);
+		if (cptCoordonnees!=3) {
+			throw new SommetException(sf);
+		}
 		return sf;
 
 	}
 
-	public static Integer [] nbPointsSegmentsFaces (File fichier) {
+	public static Integer[] nbPointsSegmentsFaces(File fichier) {
 		BufferedReader lecteurAvecBuffer = null;
 		String ligne;
-		List <Integer> maListe = new ArrayList <Integer> ();
+		List<Integer> maListe = new ArrayList<Integer>();
 
 		try {
 			lecteurAvecBuffer = new BufferedReader(new FileReader(fichier));
@@ -624,11 +649,10 @@ class LireGts {
 			System.out.println("Erreur d'ouverture : methode listerSegment");
 			System.out.println(exc.getMessage());
 		}
-		
+
 		try {
 			ligne = lecteurAvecBuffer.readLine();
 			char[] tabLigne = ligne.toCharArray();
-			
 
 			for (int i = 0; i < tabLigne.length; i++) {
 
@@ -645,27 +669,25 @@ class LireGts {
 			}
 			System.out.println("ligne = " + ligne);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		Integer [] t = nombre(maListe);
-		
+
+		Integer[] t = nombre(maListe);
+
 		try {
 			lecteurAvecBuffer.close();
 		} catch (IOException e) {
-			System.out.println("Fermeture de \"lecteurAvecBuffer\" impossible.");
+			System.out
+					.println("Fermeture de \"lecteurAvecBuffer\" impossible.");
 			e.printStackTrace();
 		}
 		return t;
 	}
-	
-	public static Integer [] nombre(List<Integer> list) {
 
+	public static Integer[] nombre(List<Integer> list) {
 		String s = "";
 		Integer[] tab = new Integer[3];
 		int cpt = 0;
-
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i) != null) {
 				s = s + "" + list.get(i);
@@ -673,7 +695,6 @@ class LireGts {
 
 			if (list.get(i) == null || i == list.size() - 1) {
 				String b = s.trim();
-
 				Integer a = Integer.parseInt(b);
 				tab[cpt] = a;
 				cpt++;
@@ -682,7 +703,6 @@ class LireGts {
 
 		}
 
-		
 		return tab;
 
 	}

@@ -1,9 +1,15 @@
 package package_exception;
+import package_util.Sommet;
 
-public class SommetException {
+public class SommetException extends Exception {
 
-	public SommetException() {
-		System.out.println("Format du sommet incorrect.");
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public SommetException(Sommet s) {
+		System.out.println("Format du sommet " + s.toString() + " incorrectes. Veuillez verifier ses coordonnees.");
 	}
 
 }
