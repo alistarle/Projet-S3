@@ -1,28 +1,51 @@
 package fr.minestate.figure;
 
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import fr.minestate.modif.Matrix;
 import fr.minestate.figure.Segment;
 import fr.minestate.utils.Point;
 
-public class Triangle implements Comparable<Triangle>{
+/**
+ * Permet de creer un triangle constitue de 3 segments
+ * 
+ * @author scta
+ *
+ */
+public class Triangle implements Comparable<Triangle> {
 
 	private Point[] points;
 	private Segment[] segments;
-	
+
+	/**
+	 * Permet de creer un triangle a partir de trois points
+	 * 
+	 * @param p1
+	 *            : le premier point du triangle
+	 * @param p2
+	 *            : le deuxieme point du triangle
+	 * @param p3
+	 *            : le troisieme point du triangle
+	 */
 	public Triangle(Point p1, Point p2, Point p3) {
-		points = new Point[] {p1, p2, p3};
+		points = new Point[] { p1, p2, p3 };
 	}
-	
+
+	/**
+	 * Permet de creer un triangle a partir de trois segments
+	 * 
+	 * @param s1
+	 *            : le premier segment du triangle
+	 * @param s2
+	 *            : le deuxieme segment du triangle
+	 * @param s3
+	 *            : le troisieme du segment du triangle
+	 */
 	public Triangle(Segment s1, Segment s2, Segment s3) {
-		segments = new Segment[] {s1, s2, s3};
-		
-		
+		segments = new Segment[] { s1, s2, s3 };
+
 		points = new Point[3];
 		Set<Point> set = new HashSet<Point>();
 		set.add(s1.getPoint1());
@@ -32,28 +55,28 @@ public class Triangle implements Comparable<Triangle>{
 		set.add(s3.getPoint1());
 		set.add(s3.getPoint2());
 		int i = 0;
-		for(Point p : set) {
+		for (Point p : set) {
 			points[i] = p;
 			i++;
 		}
 	}
 
+	/**
+	 * Permet de connaitre la coordonnee Z du centre de gravite du triangle
+	 * 
+	 * @return : la coordonnee Z du centre de gravite du triangle
+	 */
 	public float getGravityZ() {
 		float z = 0;
-		for (int i = 0; i < 3; i++) 
+		for (int i = 0; i < 3; i++)
 			z += points[i].getZ();
 		return z / 3;
-		
-		/*float z = (points[0].getZ() + points[2].getZ()) / 2;
-		for (int i = 0; i < 2 ; i++) {
-			float tmp = (points[i].getZ() + points[i+1].getZ()) / 2;
-			if (tmp > z) {
-				z = tmp;
-			}
-		}
-		return z;*/
+
 	}
 
+	/**
+	 * Permet de comparer deux triangles
+	 */
 	@Override
 	public int compareTo(Triangle t) {
 		float comp = getGravityZ() - t.getGravityZ();
@@ -63,67 +86,81 @@ public class Triangle implements Comparable<Triangle>{
 			return 0;
 		return -1;
 	}
-	
+
+	/**
+	 * Permet de connaitre les coordonnees d'un point sous forme de tableau
+	 * 
+	 * @return : les coordonnees d'un point sous forme de tableau
+	 */
 	public Point[] getCoords() {
 		return points;
 	}
-	
+
+	/**
+	 * Permet de transformer un triangle selon une matrice donnee
+	 * 
+	 * @param m
+	 *            : la matrice de transformation
+	 * @return le triangle transforme
+	 */
 	public Triangle transform(Matrix m) {
 		Point[] out = new Point[3];
-		
+
 		for (int i = 0; i < out.length; i++) {
-			out[i] = points[i].transform(m);			
+			out[i] = points[i].transform(m);
 		}
-		
+
 		return new Triangle(out[0], out[1], out[2]);
 	}
-	
-	
+
 	/**
-	 * Un segment est valide si il est constitu� de trois segments diff�rents valides 
-	 * ET que le nombre de points qui constitue ces segments est de 3.
-	 * @return true si le triangle est valide
+	 * Verifie la validite du segment
+	 * 
+	 * @return true si le triangle est valide, false sinon
 	 */
 	public boolean isValid() {
-		return allSegmentValid() && getNumberOfPoint() == 3 && allSegmentDifferents();
+		return allSegmentValid() && getNumberOfPoint() == 3
+				&& allSegmentDifferents();
 	}
-	
-	/*
-	 * Retourne vrai si les 3 segments que constitue le triangle sont differents.
+
+	/**
+	 * Verifie si les trois segment constituant le triangle sont differents
+	 * @return true si les segments sont diffents, false sinon
 	 */
 	private boolean allSegmentDifferents() {
-		
-		
+
 		return !segments[0].equals(segments[1])
 				&& !segments[1].equals(segments[2])
 				&& !segments[2].equals(segments[0]);
 	}
 
-	/*
-	 * Retourne le nombre de points DIFFERENT constituant le triangle.
+	
+	/**
+	 * Permet de connaitre le nombre de points differents constituant le segment
+	 * @return  le nombre de points differents du segment
 	 */
 	private int getNumberOfPoint() {
 		List<Point> points = new ArrayList<Point>();
-		for(Segment s : segments) {
-			if(!points.contains(s.getPoint1()))
+		for (Segment s : segments) {
+			if (!points.contains(s.getPoint1()))
 				points.add(s.getPoint1());
-			if(!points.contains(s.getPoint2()))
+			if (!points.contains(s.getPoint2()))
 				points.add(s.getPoint2());
 		}
 		return points.size();
 	}
 
-	/*
-	 * Retourne vrai si les 3 segments sont valide (non "null")
+	
+	/**
+	 * Verifie si les trois segments du triangle sont valides
+	 * @return true si les trois segments du triangle sont valide, false sinon
 	 */
 	private boolean allSegmentValid() {
-		for(Segment s : segments) {
-			if(!s.isValid())
+		for (Segment s : segments) {
+			if (!s.isValid())
 				return false;
 		}
 		return true;
 	}
-	
-	
-	
+
 }
