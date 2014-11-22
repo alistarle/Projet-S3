@@ -18,33 +18,43 @@ import fr.minestate.modif.Translation;
 import fr.minestate.utils.Point;
 
 /**
- * Class Volume pour manipuler un volume constitu� d'un ensemble de triangle
- * @author Louis
+ * Permet de creer un VolumeModel pour  manipuler un ensemble de triangle
+ * @author scta
  *
  */
+// ATTENTION : LES METHODES GETAFFINEFRAME NE SONT PAS COMMENTEES
 public class VolumeModel extends Observable {
-	private Set<Triangle> volume;
 	
+	private Set<Triangle> volume;
 	private Transformation rotationX;
 	private Transformation rotationY;
 	private Transformation rotationZ;
 	private Transformation zoom;
 	private Transformation translationX;
 	private Transformation translationY;
-	
 	private String name;
 	
+	/**
+	 * Initialise un VolumeModel
+	 */
 	public VolumeModel() {
 		volume = new HashSet<Triangle>();
-		
 		initVolume();
-		
 	}
 	
+	/**
+	 * Initialise un VolumeModel avec une collection de triangle
+	 * @param col  la collection de triangle
+	 */
 	public VolumeModel(Collection<Triangle> col) {
 		this(col, "volume sans nom");
 	}
 	
+	/**
+	 * Initialise un VolumeModel avec une collection de triangle et un nom
+	 * @param col la collection de triangle
+	 * @param name le nom que l'on souhaite donner au VolumModel
+	 */
 	public VolumeModel(Collection<Triangle> col, String name) {
 		this.name = name;
 		for(Triangle t : col) {
@@ -54,6 +64,9 @@ public class VolumeModel extends Observable {
 	}
 	
 	
+	/**
+	 * Permet d'initialiser un volume, en effectuant les reglages necessaires
+	 */
 	private void initVolume() {
 		rotationX = new Rotation(Rotation.X_AXIS, 0);
 		rotationY = new Rotation(Rotation.Y_AXIS, 0);
@@ -64,16 +77,16 @@ public class VolumeModel extends Observable {
 	}
 	
 	/**
-	 * Ajoute un triangle au volume.
-	 * @param t
+	 * Permet d'ajouter un triangle au volume.
+	 * @param t le triangle a ajouter
 	 */
 	public void addFace(Triangle t) {
 		volume.add(t);
 	}
 	
 	/**
-	 * Ajoute une collection de triangle au volume (Set, List...)
-	 * @param col
+	 * Permet d'ajouter une collection de triangle au volume
+	 * @param col la collection a ajouter au volume
 	 */
 	public void addAllFace(Collection<Triangle> col) {
 		for(Triangle t : col) {
@@ -81,14 +94,12 @@ public class VolumeModel extends Observable {
 		}
 	}
 	
+
 	public Collection<Triangle> getPolygons() {
 		Collection<Triangle> originals = volume;
 		List<Triangle> out = new ArrayList<Triangle>();
 		Matrix transformation = translationX.add(translationY).prod(rotationX).prod(rotationY)
-				.prod(rotationZ).prod(zoom);
-		//System.out.println(transformation);
-		
-		
+				.prod(rotationZ).prod(zoom);	
 		for (Triangle t : originals) {
 			out.add(t.transform(transformation));
 		}
@@ -98,6 +109,11 @@ public class VolumeModel extends Observable {
 		return out;
 	}
 	
+	/**
+	 * Permet de changer la translation
+	 * @param axis l'axe selon lequel on veut effectuer la translation
+	 * @param norm
+	 */
 	@Deprecated
 	public void setTranslation(int axis, int norm) {
 		if (axis == Translation.X_AXIS) {
@@ -107,6 +123,11 @@ public class VolumeModel extends Observable {
 		}
 	}	
 	
+	/**
+	 * Permet de modifier la rotation
+	 * @param axis l'axe selon lequel on veut modifier la rotation
+	 * @param angle l'angle de la rotation
+	 */
 	@Deprecated
 	public void setRotation(int axis, int angle) {
 		if (axis == Rotation.X_AXIS) {
@@ -118,6 +139,10 @@ public class VolumeModel extends Observable {
 		}
 	}
 	
+	/**
+	 * Permet de modifier le zoom
+	 * @param factor le niveau de zoom
+	 */
 	@Deprecated
 	public void setZoom(float factor) {
 		((Homothety) zoom).setFactor(factor);
@@ -125,6 +150,11 @@ public class VolumeModel extends Observable {
 		notifyObservers();
 	}
 	
+	/**
+	 * Permet d'effectuer une translation
+	 * @param axis l'axe selon lequel on veut effectuer la translation
+	 * @param norm
+	 */
 	public void translate(int axis, int norm) {
 		if (axis == Translation.X_AXIS) {
 			((Translation) translationX).addNorm(norm);
@@ -136,6 +166,11 @@ public class VolumeModel extends Observable {
 		notifyObservers();
 	}
 	
+	/**
+	 * Permet d'effectuer une rotation
+	 * @param axis l'axe selon lequel on veut effectuer la rotation
+	 * @param angle
+	 */
 	public void rotate(int axis, int angle) {
 		if (axis == Rotation.X_AXIS) {
 			((Rotation) rotationX).addAngle(angle);
@@ -148,12 +183,20 @@ public class VolumeModel extends Observable {
 		notifyObservers();
 	}
 	
+	/**
+	 * Permet d'effectuer un zoom
+	 * @param factor le niveau de zoom
+	 */
 	public void zoom(float factor) {
 		((Homothety) zoom).addFactor(factor);
 		setChanged();
 		notifyObservers();
 	}
 	
+	/**
+	 * Permet de calculer le zoom optimal
+	 * @param d
+	 */
 	public void optimalZoom (Dimension d) {
 		float[] volumeDim = getMaxDimensions();
 		float minX = volumeDim[0];
@@ -184,8 +227,8 @@ public class VolumeModel extends Observable {
 	
 	
 	/**
-	 * 
-	 * @return an array containing minX, maxX, minY, maxY
+	 * Permet d'obtenir les dimensions maximum
+	 * @return un tableau qui contient minX, maxX, minY, maxY
 	 */
 	private float[] getMaxDimensions() {
 		/* On remet à "zero" le zoom et les translations 
@@ -242,6 +285,10 @@ public class VolumeModel extends Observable {
 		return out;
 	}
 	
+	/**
+	 * Retourne la base
+	 * @return la base (matrix)
+	 */
 	private Matrix getBase() {
 		Matrix rotation = rotationZ.prod(rotationY).prod(rotationX);
 		Matrix out = new Matrix(3, 3);
@@ -255,23 +302,35 @@ public class VolumeModel extends Observable {
 		return out;
 	}
 	
+	/**
+	 * Permet d'executer une rotation selon une matrice
+	 * @param vector 
+	 */
 	public void rotate(Matrix vector) {
 		//TODO : verif si vecteur et exception ?	
 		/*Matrix id = new Matrix(new float[][] {
 				{1, 0, 0}, 
 				{0, 1, 0},
-				{0, 0, 1}});*/
+				{0, 0, 1}});
+	   */
 		
 		Matrix vect = getBase().invert().prod(vector);
-		
 		rotate(Rotation.Y_AXIS, (int) vect.get(0, 0));
 		rotate(Rotation.X_AXIS, (int) vect.get(1, 0));
 	}
 
+	/**
+	 * Permet de retourner le nom du VolumeModel
+	 * @return le nom du VolumeModel
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Permet de changer le nom du VolumeModel
+	 * @param name le nouveau nom du VolumeModele
+	 */
 	public void setName(String name) {
 		this.name = name;
 	}

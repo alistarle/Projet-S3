@@ -1,7 +1,4 @@
 package fr.minestate.utils;
-
-
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,31 +13,40 @@ import fr.minestate.models.ModelEntry;
 import fr.minestate.models.VolumeModel;
 import fr.minestate.models.VolumeSetModel;
 
+/**
+ * Permet de lire le fichierGTS et d'en deduire les points, les segment et les triangles
+ * @author scta
+ *
+ */
 public class GtsParser {
 	public VolumeModel volume;
 	public VolumeSetModel volumeModel;
 
+	/**
+	 * Permet de definir un GtsParser selon un volumeModel
+	 * @param volumeModel le volumeModel selon lequel on souhaite definir le gtsParser
+	 */
 	public GtsParser(VolumeSetModel volumeModel) {
 		this.volumeModel = volumeModel;
 	}
 
+	/**
+	 * Permet de recuperer les points, les segments et les triangles du fichier GTS.
+	 * @param selectedFile le fichier a analyser
+	 * @return le VolumeModel associe au fichier GTS
+	 */
 	public static VolumeModel getVolumeFromFile(File selectedFile) {
 		VolumeModel volume = new VolumeModel();
 		try {
 			FileReader fr = new FileReader(selectedFile);
 			BufferedReader reader = new BufferedReader(fr);
 			String line;
-			// on r�cup�re la 1�re ligne non comment�e
 			line = getNextLine(reader);
 			String[] numbers = line.split(" ");
-
-			// on r�cup�re les points
-
 			ArrayList<Point> points = new ArrayList<Point>();
 			ArrayList<Segment> segments = new ArrayList<Segment>();
 			ArrayList<Triangle> triangles = new ArrayList<Triangle>();
-
-			// on r�cup�re les points
+			// Recuperation des points
 			int nb = Integer.parseInt(numbers[0]);
 			for(int i = 0 ; i < nb ; i++) {
 				line = getNextLine(reader);
@@ -48,7 +54,7 @@ public class GtsParser {
 				points.add(new Point(Float.parseFloat(pts[0]), Float.parseFloat(pts[1]), Float.parseFloat(pts[2])));
 			}
 
-			// on r�cup�re les segments
+			// Recuperation des segments
 			nb = Integer.parseInt(numbers[1]);
 			for(int i = 0 ; i < nb ; i++) {
 				line = getNextLine(reader);
@@ -57,7 +63,7 @@ public class GtsParser {
 						points.get(Integer.parseInt(sgmts[1]) - 1)));
 			}
 
-			// on r�cup�re les triangles
+			// Recuperation des triangles
 			nb = Integer.parseInt(numbers[2]);
 			for(int i = 0 ; i < nb ; i++) {
 				line = getNextLine(reader);
@@ -67,9 +73,6 @@ public class GtsParser {
 						segments.get(Integer.parseInt(trs[2]) - 1)));
 			}
 			volume.addAllFace(triangles);
-
-
-
 			fr.close();
 			reader.close();
 		} catch (FileNotFoundException e) {
@@ -82,7 +85,7 @@ public class GtsParser {
 			return null;
 		}
 
-		String[] name = selectedFile.getPath().split("\\\\"); // "\\\\" pour s�parer sur le '\' (sinon bug..?)		
+		String[] name = selectedFile.getPath().split("\\\\"); // "\\\\" separation du '\' (sinon bug..?)		
 		name = name[name.length - 1].split("[.]"); // re-split pour enlever l'extension
 		volume.setName(name[0]);
 		return volume;
@@ -90,7 +93,11 @@ public class GtsParser {
 
 
 
-
+	/**
+	 * Permet de recuperer un VolumeModel depuis un ModelEntry
+	 * @param model le ModelEntry depuis lequel on veut faire un VolumeModel
+	 * @return le VolumModel recupere
+	 */
 	public static VolumeModel getVolumeFromModelEntry(ModelEntry model) {
 		VolumeModel volume = new VolumeModel();
 		try {
@@ -103,16 +110,16 @@ public class GtsParser {
 			ArrayList<Segment> segments = new ArrayList<Segment>();
 			ArrayList<Triangle> triangles = new ArrayList<Triangle>();
 
-			// on r�cup�re les points
+			// Recuperation des points
 			points = getPoints(reader, Integer.parseInt(numbers[0]));
 
-			// on r�cup�re les segments
+			// Recuperation des segments
 			segments = getSegments(reader, Integer.parseInt(numbers[1]), points);
 
-			// on r�cup�re les triangles
+			// Recuperation des triangles
 			triangles = getTriangles(reader, Integer.parseInt(numbers[2]), segments);
 
-			// on ajoute les triangles au volume
+			// Ajout des triangles au volume
 			volume.addAllFace(triangles);
 			reader.close();
 		} catch (FileNotFoundException e) {
@@ -130,6 +137,13 @@ public class GtsParser {
 	}
 
 
+	/**
+	 * Permet de recuperer les triangles dans le reader
+	 * @param reader
+	 * @param nbLines
+	 * @param segments
+	 * @return ArrayList <Triangle>
+	 */
 	private static ArrayList<Triangle> getTriangles(BufferedReader reader, int nbLines, ArrayList<Segment> segments) {
 		String line = "";
 		ArrayList<Triangle> triangles = new ArrayList<Triangle>();
@@ -145,6 +159,13 @@ public class GtsParser {
 	}
 
 
+	/**
+	 * Permet de recuperer les segments dans le reader
+	 * @param reader
+	 * @param nbLines
+	 * @param segments
+	 * @return ArrayList <Segment>
+	 */
 	private static ArrayList<Segment> getSegments(BufferedReader reader, int nbLines, ArrayList<Point> points) {
 		String line = "";
 		ArrayList<Segment> segments = new ArrayList<Segment>();
@@ -157,6 +178,13 @@ public class GtsParser {
 		return segments;
 	}
 
+	/**
+	 * Permet de recuperer les points dans le reader
+	 * @param reader
+	 * @param nbLines
+	 * @param segments
+	 * @return ArrayList <Points>
+	 */
 	private static ArrayList<Point> getPoints(BufferedReader reader, int nbLines) {
 		// on r�cup�re les points
 		String line = "";
@@ -170,7 +198,11 @@ public class GtsParser {
 	}
 
 
-
+/**
+ * Permet d'acceder a la prochaine ligne du reader
+ * @param reader
+ * @return la prochaine ligne du reader
+ */
 	private static String getNextLine(BufferedReader reader) {
 		try {
 			String line;
@@ -184,6 +216,11 @@ public class GtsParser {
 		}
 	}
 
+	/**
+	 * Permet de savoir si une ligne est commentee
+	 * @param line la ligne qui nous interesse
+	 * @return true si la ligne est commentee, false sinon
+	 */
 	private static boolean isComment(String line) {
 		for(int i = 0 ; i < line.length() ; i++) {
 			char c = line.charAt(i);
@@ -196,10 +233,15 @@ public class GtsParser {
 		return true;
 	}
 
+	/**
+	 * Verifie si le fichier est valide ou non
+	 * @param fileContent le chemin du fichier dont on veut savoir s'il est valide
+	 * @return true si le fichier est valide, false sinon
+	 */
 	public static boolean isValidFile(String fileContent) {
 		try {
 			BufferedReader reader = new BufferedReader(new StringReader(fileContent));
-			// on r�cup�re la 1�re ligne non comment�e
+			// Recuperation de la premiere ligne nom commentee
 			String line = getNextLine(reader);
 			String[] numbers = line.split(" ");
 
@@ -207,22 +249,22 @@ public class GtsParser {
 			ArrayList<Segment> segments = new ArrayList<Segment>();
 			ArrayList<Triangle> triangles = new ArrayList<Triangle>();
 
-			// on r�cup�re les points
+			// Recuperation des points
 			points = getPoints(reader, Integer.parseInt(numbers[0]));
-			// on verifie la validit� des points
+			// Verification de la validite des points
 			if(points == null) return false;
 
-			// on r�cup�re les segments
+			// Recuperation des segments
 			segments = getSegments(reader, Integer.parseInt(numbers[1]), points);
-			// on verifie la validite des segments
+			// Verification de la validite des segments
 			if(segments == null) return false;
 			for(Segment s : segments) {
 				if(!s.isValid()) return false;
 			}
 
-			// on r�cup�re les triangles
+			// Recuperation des triangles
 			triangles = getTriangles(reader, Integer.parseInt(numbers[2]), segments);
-			// on verifie la validite des triangles
+			// Verification de la validite des triangles
 			if(triangles == null) return false;
 			for(Triangle t : triangles) {
 				if(!t.isValid()) return false;

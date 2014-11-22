@@ -1,5 +1,10 @@
 package fr.minestate.modif;
 
+/**
+ * Permet d'effectuer des rotations
+ * @author scta
+ *
+ */
 public class Rotation extends Transformation {
 
 	public final static int X_AXIS = 0;
@@ -9,25 +14,45 @@ public class Rotation extends Transformation {
 	private int axis;
 	private int angle;
 
+	/**
+	 * Permet de definir une rotation
+	 * @param matrix le tableau de float qui va servir a creer la rotation
+	 */
 	public Rotation(float[][] matrix) {
 		super(matrix);
 	}
 
+	/**
+	 * Permet de definir une rotation
+	 * @param axis l'axe de la rotation
+	 * @param angle l'angle selon lequel on veut l'effectuer
+	 */
 	public Rotation(int axis, int angle) {
 		super(new float[4][4]);
 		this.axis = axis;
 		setAngle(angle);
 	}
 
+	/**
+	 * Permet d'ajouter un angle a la rotation
+	 * @param angle l'angle a ajouter
+	 */
 	public void addAngle(int angle) {
 		setAngle((this.angle + angle) %360);
 	}
 
+	/**
+	 * Permet de changer l'angle de la rotation
+	 * @param angle le nouvel angle de la rotation
+	 */
 	public void setAngle(int angle) {
 		this.angle = angle;
 		updateMatrix();
 	}
 
+	/**
+	 * Permet de mettre a jour la matrice de rotation selon l'angle et selon l'axe de rotation
+	 */
 	protected void updateMatrix() {
 		float rad = (float) Math.toRadians(angle);
 		if (axis == X_AXIS) {
