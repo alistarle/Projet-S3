@@ -1,7 +1,9 @@
 package package_tests;
 import static org.junit.Assert.*;
+
 import org.junit.Test;
-import  package_util.Sommet;
+
+import fr.minestate.utils.Sommet;
 
 
 public class SegmentTest {
