@@ -56,7 +56,7 @@ public class VolumeView extends JPanel implements Observer {
 	}
 	
 	/**
-	 * Cette methode permet d'afficher un objet
+	 * Cette methode permet d'afficher un objet (tous les triangles)
 	 */
 	@Override
 	public void paintComponent(Graphics g) {

@@ -77,7 +77,7 @@ public class VolumeModel extends Observable {
 	}
 	
 	/**
-	 * Permet d'ajouter un triangle au volume.
+	 * Permet d'ajouter un triangle au volumeModel
 	 * @param t le triangle a ajouter
 	 */
 	public void addFace(Triangle t) {
@@ -95,6 +95,10 @@ public class VolumeModel extends Observable {
 	}
 	
 
+	/**
+	 * Cette methode renvoie les triangles transformes
+	 * @return collection<triangle> 
+	 */
 	public Collection<Triangle> getPolygons() {
 		Collection<Triangle> originals = volume;
 		List<Triangle> out = new ArrayList<Triangle>();

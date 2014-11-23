@@ -24,18 +24,6 @@ public class VolumeSetModel extends Observable {
 		volumes = new ArrayList<VolumeModel>();
 	}
 
-	/*private void testInit() {
-		Point a = new Point(-1, -1, 0);
-		Point b = new Point(1, -1, 0);
-		Point c = new Point(0, 1, 0);
-		Point d = new Point(0, 0, 1);
-
-		volume.addFace(new Triangle(a, b, c));
-		volume.addFace(new Triangle(a, b, d));
-		volume.addFace(new Triangle(b, c, d));
-		volume.addFace(new Triangle(a, c, d));
-	}*/
-
 	/**
 	 * Permet de renvoyer le dernier VolumeModel
 	 * @return le dernier VolumeModel de la liste volumes

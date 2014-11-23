@@ -238,15 +238,13 @@ public class MenuBarView extends JMenuBar implements Observer, ActionListener {
 			java.io.FileInputStream sourceFile = new java.io.FileInputStream(source);
 	 
 			try{
-				
 				java.io.FileOutputStream destinationFile = null;
 				System.out.println(source.getName());
 				String name = source.getName().substring(0, source.getName().length()-4);
 				File file = new File("./res/models/"+source.getName());
 				try{
 					System.out.println(source.getPath());
-					destinationFile = new FileOutputStream(file);
-	 
+					destinationFile = new FileOutputStream(file);	 
 					// Lecture par segment de 0.5Mo 
 					byte buffer[] = new byte[512 * 1024];
 					int nbLecture;
