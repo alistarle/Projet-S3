@@ -21,10 +21,16 @@ import fr.minestate.utils.GtsParser;
 import fr.minestate.view.Fenetre;
 import fr.minestate.view.VolumeView;
 
+/**
+ * Permet de lister les objets de la bdd
+ *  * @author scta
+ *
+ */
 public class ListObjetPanel extends JPanel implements ActionListener {
 
+	private static final long serialVersionUID = 1L;
 	private Map<String, String> listObjet;
-	private JComboBox comboBox;
+	private JComboBox<?> comboBox;
 	private JButton valider = new JButton("Valider");
 	private JButton supprimer = new JButton("Supprimer");
 	private JLabel titre = new JLabel("Choisissez un model à charger");
@@ -55,6 +61,10 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 		this.revalidate();
 	}
 
+	/**
+	 * Permet de creer une combo box avec tous les objets de la bdd
+	 * @return une JComboBox contenant tous les objets de la bdd
+	 */
 	private JComboBox<?> getComboBoxObjet() {
 		String[] list = new String[listObjet.size()];
 		System.out.println(listObjet.size());
@@ -70,11 +80,14 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 			list[i] = (String) it.next();
 			i++;
 		}
-		JComboBox objetList = new JComboBox(list);
+		JComboBox<?> objetList = new JComboBox<Object>(list);
 		objetList.setBounds(0, 80, 300, 20);
 		return objetList;
 	}
 
+	/**
+	 * Permet de definir les actions quand on clique sur les boutons valider et supprimer
+	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		if (arg0.getSource() == valider) {
@@ -106,6 +119,10 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 		}
 	}
 
+	/**
+	 * Permet de charger un fichier
+	 * @param lien le lien du fichier
+	 */
 	private void loadFile(String lien) {
 		boolean estGts2 = false;
 		// Récupération du fichier

@@ -14,6 +14,12 @@ import fr.minestate.modif.Matrix;
 import fr.minestate.modif.Rotation;
 import fr.minestate.modif.Translation;
 
+/**
+ * Permet de controler un volume
+ * 
+ * @author scta
+ *
+ */
 public class VolumeController {
 
 	public static int previousMouseX;
@@ -23,6 +29,13 @@ public class VolumeController {
 	@SuppressWarnings("unused")
 	private static VolumeModel model;
 
+	/**
+	 * Retourne le MouseMotionListener associe a un VolumeModel
+	 * 
+	 * @param m
+	 *            le VolumeModel dont on veut recuperer le MouseMotionListener
+	 * @return son MouseMotionListener
+	 */
 	public static MouseMotionListener getMouseController(final VolumeModel m) {
 		return new MouseMotionListener() {
 			@Override
@@ -47,6 +60,10 @@ public class VolumeController {
 				previousMouseY = e.getY();
 			}
 
+			/**
+			 * Permet d'effectuer les actions associees aux mouvements de la
+			 * souris
+			 */
 			@Override
 			public void mouseMoved(MouseEvent e) {
 				previousMouseX = e.getX();
@@ -55,6 +72,11 @@ public class VolumeController {
 		};
 	}
 
+	/**
+	 * Permet de renvoyer le MouseWheelListener associe a un VolumeModel
+	 * @param m le VolumeModel dont on veut connaitre le MouseWheelListener
+	 * @return son MouseWheelListener
+	 */
 	public static MouseWheelListener getMouseWheelController(final VolumeModel m) {
 		return new MouseWheelListener() {
 			@Override
@@ -64,14 +86,27 @@ public class VolumeController {
 		};
 	}
 
+	/**
+	 * Permet de changer le panel
+	 * @param panel le nouveau panel
+	 */
 	public static void setPanel(JComponent panel) {
 		VolumeController.panel = panel;
 	}
 
+	/**
+	 * Permet de definir le meilleur zoom pour un VolumeModel
+	 * @param model le VolumeModel dont on veut connaitre le meilleur zoom possible
+	 */
 	public static void optimalZoom(VolumeModel model) {
 		optimalZoom(model, panel.getSize());
 	}
 
+	/**
+	 * Permet de definir le meilleur zoom pour un VolumeModel selon des dimensions
+	 * @param model le VolumeModel dont on veut connaitre le meilleur zoom
+	 * @param d les dimensions
+	 */
 	public static void optimalZoom(VolumeModel model, Dimension d) {
 		model.optimalZoom(d);
 	}

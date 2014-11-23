@@ -1,13 +1,10 @@
 package fr.minestate.view; 
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelListener;
-import java.awt.geom.Line2D;
 import java.util.Collection;
 import java.util.Observable;
 import java.util.Observer;
@@ -30,16 +27,27 @@ public class VolumeView extends JPanel implements Observer {
 	
 	private VolumeModel volumeModel;
 	
+	/**
+	 * Permet d'initialser un VolumeView sans parametre
+	 */
 	public VolumeView() {
 		volumeModel = new VolumeModel();
 	}
 	
+	/**
+	 * Permet d'initialiser un VolumeView en precisant un VolumeModel
+	 * @param v le VolumeModel que l'on veut dessiner
+	 */
 	public VolumeView(VolumeModel v) {
 		add(new JLabel(v.getName()));
 		this.volumeModel = v;
 		this.volumeModel.addObserver(this);
 	}
 	
+	/**
+	 * Permet de changer le volumeModel
+	 * @param le nouveau volumeModel
+	 */
 	public void setVolumeModel(VolumeModel volumeModel) {
 		volumeModel.deleteObservers();
 		this.volumeModel = volumeModel;
@@ -47,15 +55,22 @@ public class VolumeView extends JPanel implements Observer {
 		repaint();
 	}
 	
+	/**
+	 * Cette methode permet d'afficher un objet
+	 */
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);		
 		Collection<Triangle> triangles = volumeModel.getPolygons();
 		for (Triangle t : triangles) 
 			drawTriangle(t, g);
-		//drawAffineFrame(g, volumeModel.getAffineFrame());
 	}
 	
+	/**
+	 * Cette methode permet d'afficher un triangle
+	 * @param t le triangle a afficher
+	 * @param g permet d'afficher
+	 */
 	private void drawTriangle(Triangle t, Graphics g) {
 		Point[] points = t.getCoords();
 		Polygon p = new Polygon();
@@ -67,23 +82,26 @@ public class VolumeView extends JPanel implements Observer {
 		g.drawPolygon(p);
 	}
 	
-	/*private Color getRandomColor() {
-		Random r = new Random();		
-		return new Color(r.nextInt(255), r.nextInt(255), r.nextInt(255));
-	}*/
-
+	/**
+	 * Permet de mettre a jour
+	 */
 	@Override
 	public void update(Observable o, Object arg) {
 		repaint();
 	}
 	
-	
+	/**
+	 * Permet de supprimer les listeners associes a la roulette de la souris
+	 */
 	public void removeMouseWheelListener() {
 		for(MouseWheelListener l : this.getMouseWheelListeners()) {
 			this.removeMouseWheelListener(l);
 		}
 	}
 	
+	/**
+	 * Permet de supprimer les listeners associes aux mouvements de la souris
+	 */
 	public void removeMouseMotionListeners() {
 		for(MouseMotionListener l : this.getMouseMotionListeners()) {
 			this.removeMouseMotionListener(l);

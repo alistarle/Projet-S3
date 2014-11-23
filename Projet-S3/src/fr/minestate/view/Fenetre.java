@@ -7,6 +7,10 @@ import javax.swing.JPanel;
 
 import fr.minestate.models.VolumeSetModel;
 
+/**
+ * Permet de definir la fenetre principale d'affichage
+ * @author scta
+ */
 public class Fenetre extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -15,6 +19,9 @@ public class Fenetre extends JFrame {
 	private MenuBarView mv;
 	private JPanel pan = new JPanel();
 	
+	/**
+	 * Permet d'initialiser la fenetre
+	 */
 	public Fenetre() {
 		this.setLayout(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -34,10 +41,18 @@ public class Fenetre extends JFrame {
 		this.pack();
 	}
 
+	/**
+	 * Retourne le panel de la fenetre
+	 * @return le panel de la fenetre
+	 */
 	public JPanel getPan() {
 		return this.pan;
 	}
 	
+	/**
+	 * Permet de changer le panel de la fenetre
+	 * @param panel le nouveau panel
+	 */
 	public void setPan(JPanel panel){
 		this.pan = panel;
 	}

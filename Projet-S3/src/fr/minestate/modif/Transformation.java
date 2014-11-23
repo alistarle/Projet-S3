@@ -15,5 +15,8 @@ public abstract class Transformation extends Matrix {
 		super(matrix);
 	}
 	
+	/**
+	 * Methode abstraite pour mettre a jour les matrices de translation 
+	 */
 	protected abstract void updateMatrix();
 }

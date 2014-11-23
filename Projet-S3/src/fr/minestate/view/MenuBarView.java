@@ -29,8 +29,8 @@ import fr.minestate.utils.FiltreSimple;
 import fr.minestate.utils.GtsParser;
 
 /**
- * Contient la barre de menu en haut de l'�cran.
- * @author Simon
+ * Permet de definir la barre de menu en haut de l'ecran
+ * @author scta
  *
  */
 public class MenuBarView extends JMenuBar implements Observer, ActionListener {
@@ -46,7 +46,7 @@ public class MenuBarView extends JMenuBar implements Observer, ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	/*
-	 * item du menu file
+	 * Items du menu file
 	 */
 	private JMenuItem save;
 	private JMenuItem open;
@@ -54,7 +54,7 @@ public class MenuBarView extends JMenuBar implements Observer, ActionListener {
 	private JMenuItem openBdd;
 	
 	/*
-	 * item du menu edit
+	 * Items du menu edit
 	 */
 	private JMenuItem zoom;
 	private JMenuItem unzoom;
@@ -65,7 +65,7 @@ public class MenuBarView extends JMenuBar implements Observer, ActionListener {
 		initGUI();
 	}
 
-	/*
+	/**
 	 * Initialise la GUI de la barre de menu
 	 */
 	private void initGUI() {
@@ -106,14 +106,22 @@ public class MenuBarView extends JMenuBar implements Observer, ActionListener {
 		this.setBackground(new Color(27, 126, 179));
 	}
 	
+	/**
+	 * Permet de change de VolumeSetModel
+	 * @param vsm le nouveau VolumeSetModel
+	 */
 	public void setVolumeSetModel(VolumeSetModel vsm){
 		this.volumeSetModel = vsm;
 	}
+	
 	
 	@Override
 	public void update(Observable o, Object arg) {
 	}
 
+	/**
+	 * Permet de definir les actions realisees lorsque l'on clique sur les boutons SAVE, OPEN, on que l'on ferme / annule le JF, ou LOAD BDD
+	 */
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		//Si on clique sur le bouton save
@@ -221,8 +229,8 @@ public class MenuBarView extends JMenuBar implements Observer, ActionListener {
 		
 	}
 	
-	/** copie le fichier source dans le fichier resultat
-	 * retourne vrai si cela réussit
+	/** Copie le fichier source dans le fichier resultat
+	 * return  vrai si cela réussit, false sinon
 	 */
 	public static boolean copyFile(File source){
 		try{

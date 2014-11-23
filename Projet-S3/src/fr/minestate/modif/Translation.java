@@ -6,7 +6,6 @@ package fr.minestate.modif;
  *
  */
 
-// 	ATTENTION : LES METHODES SETNORM  & GETNORM & ADDNORM N'ONT PAS ETE MODIFIEES, CAUSE : JE NE COMPRENDS PAS CE QU'EST NORM
 public class Translation extends Transformation {
 
 	public final static int X_AXIS = 0;
@@ -41,6 +40,10 @@ public class Translation extends Transformation {
 		updateMatrix();
 	}
 	
+	/**
+	 * Permet de renvoyer la norme
+	 * @return la norme
+	 */
 	public int getNorm() {
 		return norm;
 	}
@@ -67,6 +70,10 @@ public class Translation extends Transformation {
 									{0, 0, 0, 1}};
 	}
 
+	/**
+	 * Permet d'ajouter une norme
+	 * @param norm la norme a ajouter
+	 */
 	public void addNorm(int norm) {
 		setNorm(this.norm + norm);
 	}

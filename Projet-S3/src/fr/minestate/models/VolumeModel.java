@@ -10,7 +10,7 @@ import java.util.Observable;
 import java.util.Set;
 
 import fr.minestate.figure.Triangle;
-import fr.minestate.modif.Homothety;
+import fr.minestate.modif.Homothetie;
 import fr.minestate.modif.Matrix;
 import fr.minestate.modif.Rotation;
 import fr.minestate.modif.Transformation;
@@ -22,7 +22,7 @@ import fr.minestate.utils.Point;
  * @author scta
  *
  */
-// ATTENTION : LES METHODES GETAFFINEFRAME NE SONT PAS COMMENTEES
+// ATTENTION : LA METHODE GETAFFINEFRAME N'EST PAS COMMENTEE
 public class VolumeModel extends Observable {
 	
 	private Set<Triangle> volume;
@@ -71,7 +71,7 @@ public class VolumeModel extends Observable {
 		rotationX = new Rotation(Rotation.X_AXIS, 0);
 		rotationY = new Rotation(Rotation.Y_AXIS, 0);
 		rotationZ = new Rotation(Rotation.Z_AXIS, 0);
-		zoom = new Homothety(100);
+		zoom = new Homothetie(100);
 		translationX = new Translation(Translation.X_AXIS, 300);
 		translationY = new Translation(Translation.Y_AXIS, 300);		
 	}
@@ -145,7 +145,7 @@ public class VolumeModel extends Observable {
 	 */
 	@Deprecated
 	public void setZoom(float factor) {
-		((Homothety) zoom).setFactor(factor);
+		((Homothetie) zoom).setfacteur(factor);
 		setChanged();
 		notifyObservers();
 	}
@@ -188,7 +188,7 @@ public class VolumeModel extends Observable {
 	 * @param factor le niveau de zoom
 	 */
 	public void zoom(float factor) {
-		((Homothety) zoom).addFactor(factor);
+		((Homothetie) zoom).addfacteur(factor);
 		setChanged();
 		notifyObservers();
 	}
@@ -235,8 +235,8 @@ public class VolumeModel extends Observable {
 		* pour effectuer le calcul sur les coord reelles 
 		* des points de l'objet 
 		*/
-		float factor = ((Homothety) zoom).getFactor();
-		((Homothety) zoom).setFactor(1);
+		float factor = ((Homothetie) zoom).getfacteur();
+		((Homothetie) zoom).setfacteur(1);
 		int xNorm = ((Translation) translationX).getNorm();
 		((Translation) translationX).setNorm(0);
 		int yNorm = ((Translation) translationY).getNorm();
@@ -268,14 +268,14 @@ public class VolumeModel extends Observable {
 		// on restaure les valeurs de zoom
 		// et translations (au cas ou la methode serait appellee 
 		// dans une situation autre que le zoom opti/centrage
-		((Homothety) zoom).setFactor(factor);
+		((Homothetie) zoom).setfacteur(factor);
 		((Translation) translationX).setNorm(xNorm);
 		((Translation) translationY).setNorm(yNorm);
 		return new float[] {minX, maxX, minY, maxY};
 	}
 	
 	public Point[] getAffineFrame() {
-		Matrix m = rotationZ.prod(rotationY).prod(rotationX).prod(new Homothety(20));
+		Matrix m = rotationZ.prod(rotationY).prod(rotationX).prod(new Homothetie(20));
 		Point[] out = new Point[3];
 		
 		for (int i = 0; i < 3; i++) {
