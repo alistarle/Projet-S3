@@ -3,7 +3,7 @@ package fr.minestate.modif;
 /**
  * Permet de definir une Homothetie
  */
-public class Homothetie extends Transformation {
+public class Homothetie extends Modification {
 
 	private float facteur;
 	

@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Set;
 
-import fr.minestate.figure.Triangle;
+import fr.minestate.figure.Face;
 import fr.minestate.modif.Homothetie;
 import fr.minestate.modif.Matrix;
 import fr.minestate.modif.Rotation;
-import fr.minestate.modif.Transformation;
+import fr.minestate.modif.Modification;
 import fr.minestate.modif.Translation;
 import fr.minestate.utils.Point;
 
@@ -23,22 +23,22 @@ import fr.minestate.utils.Point;
  *
  */
 // ATTENTION : LA METHODE GETAFFINEFRAME N'EST PAS COMMENTEE
-public class VolumeModel extends Observable {
+public class ModelVolume extends Observable {
 	
-	private Set<Triangle> volume;
-	private Transformation rotationX;
-	private Transformation rotationY;
-	private Transformation rotationZ;
-	private Transformation zoom;
-	private Transformation translationX;
-	private Transformation translationY;
+	private Set<Face> volume;
+	private Modification rotationX;
+	private Modification rotationY;
+	private Modification rotationZ;
+	private Modification zoom;
+	private Modification translationX;
+	private Modification translationY;
 	private String name;
 	
 	/**
 	 * Initialise un VolumeModel
 	 */
-	public VolumeModel() {
-		volume = new HashSet<Triangle>();
+	public ModelVolume() {
+		volume = new HashSet<Face>();
 		initVolume();
 	}
 	
@@ -46,7 +46,7 @@ public class VolumeModel extends Observable {
 	 * Initialise un VolumeModel avec une collection de triangle
 	 * @param col  la collection de triangle
 	 */
-	public VolumeModel(Collection<Triangle> col) {
+	public ModelVolume(Collection<Face> col) {
 		this(col, "volume sans nom");
 	}
 	
@@ -55,9 +55,9 @@ public class VolumeModel extends Observable {
 	 * @param col la collection de triangle
 	 * @param name le nom que l'on souhaite donner au VolumModel
 	 */
-	public VolumeModel(Collection<Triangle> col, String name) {
+	public ModelVolume(Collection<Face> col, String name) {
 		this.name = name;
-		for(Triangle t : col) {
+		for(Face t : col) {
 			volume.add(t);
 		}
 		initVolume();
@@ -80,7 +80,7 @@ public class VolumeModel extends Observable {
 	 * Permet d'ajouter un triangle au volumeModel
 	 * @param t le triangle a ajouter
 	 */
-	public void addFace(Triangle t) {
+	public void addFace(Face t) {
 		volume.add(t);
 	}
 	
@@ -88,8 +88,8 @@ public class VolumeModel extends Observable {
 	 * Permet d'ajouter une collection de triangle au volume
 	 * @param col la collection a ajouter au volume
 	 */
-	public void addAllFace(Collection<Triangle> col) {
-		for(Triangle t : col) {
+	public void addAllFace(Collection<Face> col) {
+		for(Face t : col) {
 			volume.add(t);
 		}
 	}
@@ -99,12 +99,12 @@ public class VolumeModel extends Observable {
 	 * Cette methode renvoie les triangles transformes
 	 * @return collection<triangle> 
 	 */
-	public Collection<Triangle> getPolygons() {
-		Collection<Triangle> originals = volume;
-		List<Triangle> out = new ArrayList<Triangle>();
+	public Collection<Face> getPolygons() {
+		Collection<Face> originals = volume;
+		List<Face> out = new ArrayList<Face>();
 		Matrix transformation = translationX.add(translationY).prod(rotationX).prod(rotationY)
 				.prod(rotationZ).prod(zoom);	
-		for (Triangle t : originals) {
+		for (Face t : originals) {
 			out.add(t.transform(transformation));
 		}
 		
@@ -250,7 +250,7 @@ public class VolumeModel extends Observable {
 		
 		// On itere sur tous les points pour
 		// recuperer les valeurs min et max
-		for (Triangle t : getPolygons()) {
+		for (Face t : getPolygons()) {
 			for (Point p : t.getCoords()) {
 				if (minX == null) {
 					minX = p.getX();

@@ -3,16 +3,16 @@ package fr.minestate.models;
 import java.util.ArrayList;
 import java.util.Observable;
 
-import fr.minestate.control.VolumeController;
+import fr.minestate.mouvement.MouvementVolume;
 
 /**
  * Permet de definir un SET de VolumeModel
  * @author scta
  *
  */
-public class VolumeSetModel extends Observable {
+public class VolumeChangerModel extends Observable {
 
-	private ArrayList<VolumeModel> volumes;
+	private ArrayList<ModelVolume> volumes;
 	int currentVolumeId = -1;
 	int removedVolumeId = -1;
 
@@ -20,15 +20,15 @@ public class VolumeSetModel extends Observable {
 	/**
 	 * Permet de definir un VolumeSetModel
 	 */
-	public VolumeSetModel() {
-		volumes = new ArrayList<VolumeModel>();
+	public VolumeChangerModel() {
+		volumes = new ArrayList<ModelVolume>();
 	}
 
 	/**
 	 * Permet de renvoyer le dernier VolumeModel
 	 * @return le dernier VolumeModel de la liste volumes
 	 */
-	public VolumeModel getLastVolume() {
+	public ModelVolume getLastVolume() {
 		if(volumes.size() > 0)
 			return volumes.get(volumes.size() - 1);
 		return null;
@@ -86,10 +86,10 @@ public class VolumeSetModel extends Observable {
 	 * Permet d'ajouter un volumeModele
 	 * @param volume le nouveau volumeModel a ajoute
 	 */
-	public void addVolume(VolumeModel volume) {
+	public void addVolume(ModelVolume volume) {
 		this.volumes.add(volume);
 		setCurrentVolume(volumes.size() - 1);
-		VolumeController.optimalZoom(volume);
+		MouvementVolume.optimalZoom(volume);
 		notifyObservers();
 	}
 

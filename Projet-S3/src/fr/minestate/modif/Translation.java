@@ -6,7 +6,7 @@ package fr.minestate.modif;
  *
  */
 
-public class Translation extends Transformation {
+public class Translation extends Modification {
 
 	public final static int X_AXIS = 0;
 	public final static int Y_AXIS = 1;

@@ -14,7 +14,7 @@ import fr.minestate.utils.Point;
  * @author scta
  *
  */
-public class Triangle implements Comparable<Triangle> {
+public class Face implements Comparable<Face> {
 
 	private Point[] points;
 	private Segment[] segments;
@@ -29,7 +29,7 @@ public class Triangle implements Comparable<Triangle> {
 	 * @param p3
 	 *            : le troisieme point du triangle
 	 */
-	public Triangle(Point p1, Point p2, Point p3) {
+	public Face(Point p1, Point p2, Point p3) {
 		points = new Point[] { p1, p2, p3 };
 	}
 
@@ -43,7 +43,7 @@ public class Triangle implements Comparable<Triangle> {
 	 * @param s3
 	 *            : le troisieme du segment du triangle
 	 */
-	public Triangle(Segment s1, Segment s2, Segment s3) {
+	public Face(Segment s1, Segment s2, Segment s3) {
 		segments = new Segment[] { s1, s2, s3 };
 
 		points = new Point[3];
@@ -78,7 +78,7 @@ public class Triangle implements Comparable<Triangle> {
 	 * Permet de comparer deux triangles
 	 */
 	@Override
-	public int compareTo(Triangle t) {
+	public int compareTo(Face t) {
 		float comp = getGravityZ() - t.getGravityZ();
 		if (comp > 0)
 			return 1;
@@ -103,14 +103,14 @@ public class Triangle implements Comparable<Triangle> {
 	 *            : la matrice de transformation
 	 * @return le triangle transforme
 	 */
-	public Triangle transform(Matrix m) {
+	public Face transform(Matrix m) {
 		Point[] out = new Point[3];
 
 		for (int i = 0; i < out.length; i++) {
 			out[i] = points[i].transform(m);
 		}
 
-		return new Triangle(out[0], out[1], out[2]);
+		return new Face(out[0], out[1], out[2]);
 	}
 
 	/**

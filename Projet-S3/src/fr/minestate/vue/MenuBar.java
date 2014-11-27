@@ -1,4 +1,4 @@
-package fr.minestate.view;
+package fr.minestate.vue;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -20,11 +20,11 @@ import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
 import fr.minestate.bdd.Connexion;
-import fr.minestate.control.VolumeController;
 import fr.minestate.exception.FichierException;
 import fr.minestate.ihm.ListObjetPanel;
-import fr.minestate.models.VolumeModel;
-import fr.minestate.models.VolumeSetModel;
+import fr.minestate.models.ModelVolume;
+import fr.minestate.models.VolumeChangerModel;
+import fr.minestate.mouvement.MouvementVolume;
 import fr.minestate.utils.FiltreSimple;
 import fr.minestate.utils.GtsParser;
 
@@ -33,8 +33,8 @@ import fr.minestate.utils.GtsParser;
  * @author scta
  *
  */
-public class MenuBarView extends JMenuBar implements Observer, ActionListener {
-	private VolumeSetModel volumeSetModel;
+public class MenuBar extends JMenuBar implements Observer, ActionListener {
+	private VolumeChangerModel volumeSetModel;
 	private Fenetre ms;
 	
 	/*
@@ -59,7 +59,7 @@ public class MenuBarView extends JMenuBar implements Observer, ActionListener {
 	private JMenuItem zoom;
 	private JMenuItem unzoom;
 	
-	public MenuBarView(VolumeSetModel volumeSetModel, Fenetre ms) {
+	public MenuBar(VolumeChangerModel volumeSetModel, Fenetre ms) {
 		this.volumeSetModel = volumeSetModel;
 		this.ms = ms;
 		initGUI();
@@ -110,7 +110,7 @@ public class MenuBarView extends JMenuBar implements Observer, ActionListener {
 	 * Permet de change de VolumeSetModel
 	 * @param vsm le nouveau VolumeSetModel
 	 */
-	public void setVolumeSetModel(VolumeSetModel vsm){
+	public void setVolumeSetModel(VolumeChangerModel vsm){
 		this.volumeSetModel = vsm;
 	}
 	
@@ -172,9 +172,9 @@ public class MenuBarView extends JMenuBar implements Observer, ActionListener {
 					e1.printStackTrace();
 				}
 			if(estGts2){
-				VolumeModel vm = GtsParser.getVolumeFromFile(fichier2);
+				ModelVolume vm = GtsParser.getVolumeFromFile(fichier2);
 				JPanel pan = this.ms.getPan();
-				VolumeView vv = new VolumeView();
+				VueVolume vv = new VueVolume();
 				vv.setBounds(0, 0, 1024, 700);
 				// on enlève les anciens listeners (au cas ou l'utilisateur change d'avis)
 				vv.removeMouseMotionListeners();
@@ -182,8 +182,8 @@ public class MenuBarView extends JMenuBar implements Observer, ActionListener {
 				// on met à jour le modèle
 				vv.setVolumeModel(vm);
 				// on remet les bons listeners
-				vv.addMouseMotionListener(VolumeController.getMouseController(vm));
-				vv.addMouseWheelListener(VolumeController.getMouseWheelController(vm));
+				vv.addMouseMotionListener(MouvementVolume.getMouseController(vm));
+				vv.addMouseWheelListener(MouvementVolume.getMouseWheelController(vm));
 				
 				//vv.setPreferredSize(new Dimension(1024, 700));
 				vv.setVisible(true);

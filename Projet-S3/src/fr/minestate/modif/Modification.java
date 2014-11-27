@@ -5,13 +5,13 @@ package fr.minestate.modif;
  * @author scta
  *
  */
-public abstract class Transformation extends Matrix {
+public abstract class Modification extends Matrix {
 
 	/**
 	 * Permet de definir une Transformation
 	 * @param matrix le tableau de float selon lequel on definit la rotation
 	 */
-	public Transformation(float[][] matrix) {
+	public Modification(float[][] matrix) {
 		super(matrix);
 	}
 	

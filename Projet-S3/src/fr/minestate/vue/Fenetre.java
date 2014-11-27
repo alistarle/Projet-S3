@@ -1,11 +1,11 @@
-package fr.minestate.view;
+package fr.minestate.vue;
 
 import java.awt.Dimension;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import fr.minestate.models.VolumeSetModel;
+import fr.minestate.models.VolumeChangerModel;
 
 /**
  * Permet de definir la fenetre principale d'affichage
@@ -15,8 +15,8 @@ public class Fenetre extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel mainPanel;
-	private VolumeSetModel volumeSetModel;
-	private MenuBarView mv;
+	private VolumeChangerModel volumeSetModel;
+	private MenuBar mv;
 	private JPanel pan = new JPanel();
 	
 	/**
@@ -29,8 +29,8 @@ public class Fenetre extends JFrame {
 		this.setVisible(true);
 		this.setTitle("Modélisation");
 		this.setPreferredSize(new Dimension(1024, 728));
-		this.volumeSetModel = new VolumeSetModel();
-		this.mv = new MenuBarView(volumeSetModel, this);
+		this.volumeSetModel = new VolumeChangerModel();
+		this.mv = new MenuBar(volumeSetModel, this);
 		mv.setBounds(0, 0, 1024, 30);
 		this.mainPanel = new JPanel();
 		this.setBounds(0, 30, 1024, 700);

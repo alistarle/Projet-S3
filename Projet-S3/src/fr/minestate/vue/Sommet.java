@@ -1,4 +1,4 @@
-package fr.minestate.view;
+package fr.minestate.vue;
 
 
 
@@ -11,28 +11,28 @@ import fr.minestate.modif.Matrix;
  */
 
 
-public class Point {
+public class Sommet {
 	private float x;
 	private float y;
 	private float z;
 	
-	public Point() {
+	public Sommet() {
 		this(0, 0, 0);
 	}
 	
-	public Point(float x, float y, float z) {
+	public Sommet(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 	
-	public Point(float[] coord) {
+	public Sommet(float[] coord) {
 		x = coord[0];
 		y = coord[1];
 		z = coord[2];
 	}
 	
-	public Point(Matrix m) {
+	public Sommet(Matrix m) {
 		x = m.get(0, 0);
 		y = m.get(1, 0);
 		z = m.get(2, 0);
@@ -43,7 +43,7 @@ public class Point {
 	 * @param p
 	 * @return true si les 3 coordonn�es du point actuel sont �gales aux 3 coordonn�es du point p.
 	 */
-	public boolean equals(Point p) {
+	public boolean equals(Sommet p) {
 		return this.x == p.x && this.y == p.y && this.z == p.z;
 	}
 
@@ -66,7 +66,7 @@ public class Point {
 										{1f}});
 	}
 	
-	public Point transform(Matrix transformation) {
-		return new Point(transformation.prod(getHomogenousVector()));
+	public Sommet transform(Matrix transformation) {
+		return new Sommet(transformation.prod(getHomogenousVector()));
 	}
 }

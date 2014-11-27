@@ -1,27 +1,27 @@
-package fr.minestate.control;
+package fr.minestate.mouvement;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import fr.minestate.models.VolumeSetModel;
-import fr.minestate.view.VolumeSetView;
+import fr.minestate.models.VolumeChangerModel;
+import fr.minestate.vue.VolumeSetVue;
 
 /**
  * Permet de controler un ensemble de Volume
  * @author scta
  *
  */
-public class VolumeSetController {
+public class VolumeSetMouvement {
 	
 	/**
 	 * Permet de detecter le changement d'etat d'un VolumeSetModel
 	 * @param m le VolumeSet
 	 * @return changeListener
 	 */
-	public static ChangeListener getTabChangeController(final VolumeSetModel m) {
+	public static ChangeListener getTabChangeController(final VolumeChangerModel m) {
 		return new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				m.setCurrentVolume(((VolumeSetView)e.getSource()).getSelectedIndex());
+				m.setCurrentVolume(((VolumeSetVue)e.getSource()).getSelectedIndex());
 			}
 		};
 	}

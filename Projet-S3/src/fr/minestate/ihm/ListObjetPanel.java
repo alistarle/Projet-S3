@@ -14,12 +14,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import fr.minestate.bdd.Connexion;
-import fr.minestate.control.VolumeController;
 import fr.minestate.exception.FichierException;
-import fr.minestate.models.VolumeModel;
+import fr.minestate.models.ModelVolume;
+import fr.minestate.mouvement.MouvementVolume;
 import fr.minestate.utils.GtsParser;
-import fr.minestate.view.Fenetre;
-import fr.minestate.view.VolumeView;
+import fr.minestate.vue.Fenetre;
+import fr.minestate.vue.VueVolume;
 
 /**
  * Permet de lister les objets de la bdd
@@ -138,10 +138,10 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 				e1.printStackTrace();
 			}
 		if (estGts2) {
-			VolumeModel vm = GtsParser.getVolumeFromFile(fichier2);
+			ModelVolume vm = GtsParser.getVolumeFromFile(fichier2);
 
 			JPanel pan = this.ms.getPan();
-			VolumeView vv = new VolumeView();
+			VueVolume vv = new VueVolume();
 			vv.setBounds(0, 0, 1024, 700);
 			// on enlève les anciens listeners (au cas ou l'utilisateur change
 			// d'avis)
@@ -150,8 +150,8 @@ public class ListObjetPanel extends JPanel implements ActionListener {
 			// on met à jour le modèle
 			vv.setVolumeModel(vm);
 			// on remet les bons listeners
-			vv.addMouseMotionListener(VolumeController.getMouseController(vm));
-			vv.addMouseWheelListener(VolumeController
+			vv.addMouseMotionListener(MouvementVolume.getMouseController(vm));
+			vv.addMouseWheelListener(MouvementVolume
 					.getMouseWheelController(vm));
 
 			// vv.setPreferredSize(new Dimension(1024, 700));

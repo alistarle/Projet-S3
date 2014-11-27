@@ -1,27 +1,27 @@
-package fr.minestate.view;
+package fr.minestate.vue;
 
 import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JTabbedPane;
 
-import fr.minestate.control.VolumeController;
-import fr.minestate.control.VolumeSetController;
-import fr.minestate.models.VolumeModel;
-import fr.minestate.models.VolumeSetModel;
+import fr.minestate.models.ModelVolume;
+import fr.minestate.models.VolumeChangerModel;
+import fr.minestate.mouvement.MouvementVolume;
+import fr.minestate.mouvement.VolumeSetMouvement;
 
 /**
  * Permet d'afficher un VolumeSet
  * JTabbedPane = permet d'avoir plusieurs onglets
  */
-public class VolumeSetView extends JTabbedPane implements Observer {
+public class VolumeSetVue extends JTabbedPane implements Observer {
 	private static final long serialVersionUID = 1L;
 
-	private VolumeSetModel volumeSetModel;
-	public VolumeSetView(VolumeSetModel volumeSetModel) {
+	private VolumeChangerModel volumeSetModel;
+	public VolumeSetVue(VolumeChangerModel volumeSetModel) {
 		this.volumeSetModel = volumeSetModel;
 		volumeSetModel.addObserver(this);
-		addChangeListener(VolumeSetController.getTabChangeController(volumeSetModel));
+		addChangeListener(VolumeSetMouvement.getTabChangeController(volumeSetModel));
 	}
 
 	
@@ -29,10 +29,10 @@ public class VolumeSetView extends JTabbedPane implements Observer {
 	 * Permet d'afficher un objet dans un nouvel onglet
 	 * @param v l'objet a afficher
 	 */
-	private void addTab(VolumeModel v) {
-		VolumeView vView = new VolumeView(v);
-		vView.addMouseMotionListener(VolumeController.getMouseController(v));
-		vView.addMouseWheelListener(VolumeController.getMouseWheelController(v));
+	private void addTab(ModelVolume v) {
+		VueVolume vView = new VueVolume(v);
+		vView.addMouseMotionListener(MouvementVolume.getMouseController(v));
+		vView.addMouseWheelListener(MouvementVolume.getMouseWheelController(v));
 		addTab("tab", vView);
 		int tabIdx = getTabCount() - 1;
 		setSelectedIndex(tabIdx);
@@ -57,7 +57,7 @@ public class VolumeSetView extends JTabbedPane implements Observer {
 	 * Retourne le VolumeSetModel
 	 * @return VolumeSetModel
 	 */
-	public VolumeSetModel getVolumeSetModel() {
+	public VolumeChangerModel getVolumeSetModel() {
 		return volumeSetModel;
 	}
 }

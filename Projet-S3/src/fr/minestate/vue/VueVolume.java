@@ -1,4 +1,4 @@
-package fr.minestate.view; 
+package fr.minestate.vue; 
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -12,8 +12,8 @@ import java.util.Observer;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import fr.minestate.figure.Triangle;
-import fr.minestate.models.VolumeModel;
+import fr.minestate.figure.Face;
+import fr.minestate.models.ModelVolume;
 import fr.minestate.utils.Point;
 
 /**
@@ -21,24 +21,24 @@ import fr.minestate.utils.Point;
  * @author Simon
  *
  */
-public class VolumeView extends JPanel implements Observer {
+public class VueVolume extends JPanel implements Observer {
 	private static final long serialVersionUID = 1L;
 	
 	
-	private VolumeModel volumeModel;
+	private ModelVolume volumeModel;
 	
 	/**
 	 * Permet d'initialser un VolumeView sans parametre
 	 */
-	public VolumeView() {
-		volumeModel = new VolumeModel();
+	public VueVolume() {
+		volumeModel = new ModelVolume();
 	}
 	
 	/**
 	 * Permet d'initialiser un VolumeView en precisant un VolumeModel
 	 * @param v le VolumeModel que l'on veut dessiner
 	 */
-	public VolumeView(VolumeModel v) {
+	public VueVolume(ModelVolume v) {
 		add(new JLabel(v.getName()));
 		this.volumeModel = v;
 		this.volumeModel.addObserver(this);
@@ -48,7 +48,7 @@ public class VolumeView extends JPanel implements Observer {
 	 * Permet de changer le volumeModel
 	 * @param le nouveau volumeModel
 	 */
-	public void setVolumeModel(VolumeModel volumeModel) {
+	public void setVolumeModel(ModelVolume volumeModel) {
 		volumeModel.deleteObservers();
 		this.volumeModel = volumeModel;
 		this.volumeModel.addObserver(this);
@@ -61,8 +61,8 @@ public class VolumeView extends JPanel implements Observer {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);		
-		Collection<Triangle> triangles = volumeModel.getPolygons();
-		for (Triangle t : triangles) 
+		Collection<Face> triangles = volumeModel.getPolygons();
+		for (Face t : triangles) 
 			drawTriangle(t, g);
 	}
 	
@@ -71,7 +71,7 @@ public class VolumeView extends JPanel implements Observer {
 	 * @param t le triangle a afficher
 	 * @param g permet d'afficher
 	 */
-	private void drawTriangle(Triangle t, Graphics g) {
+	private void drawTriangle(Face t, Graphics g) {
 		Point[] points = t.getCoords();
 		Polygon p = new Polygon();
 		for (Point m : points) 

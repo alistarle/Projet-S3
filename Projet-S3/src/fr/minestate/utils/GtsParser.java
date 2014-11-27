@@ -8,10 +8,10 @@ import java.io.StringReader;
 import java.util.ArrayList;
 
 import fr.minestate.figure.Segment;
-import fr.minestate.figure.Triangle;
+import fr.minestate.figure.Face;
 import fr.minestate.models.ModelEntry;
-import fr.minestate.models.VolumeModel;
-import fr.minestate.models.VolumeSetModel;
+import fr.minestate.models.ModelVolume;
+import fr.minestate.models.VolumeChangerModel;
 
 /**
  * Permet de lire le fichierGTS et d'en deduire les points, les segment et les triangles
@@ -19,14 +19,14 @@ import fr.minestate.models.VolumeSetModel;
  *
  */
 public class GtsParser {
-	public VolumeModel volume;
-	public VolumeSetModel volumeModel;
+	public ModelVolume volume;
+	public VolumeChangerModel volumeModel;
 
 	/**
 	 * Permet de definir un GtsParser selon un volumeModel
 	 * @param volumeModel le volumeModel selon lequel on souhaite definir le gtsParser
 	 */
-	public GtsParser(VolumeSetModel volumeModel) {
+	public GtsParser(VolumeChangerModel volumeModel) {
 		this.volumeModel = volumeModel;
 	}
 
@@ -35,8 +35,8 @@ public class GtsParser {
 	 * @param selectedFile le fichier a analyser
 	 * @return le VolumeModel associe au fichier GTS
 	 */
-	public static VolumeModel getVolumeFromFile(File selectedFile) {
-		VolumeModel volume = new VolumeModel();
+	public static ModelVolume getVolumeFromFile(File selectedFile) {
+		ModelVolume volume = new ModelVolume();
 		try {
 			FileReader fr = new FileReader(selectedFile);
 			BufferedReader reader = new BufferedReader(fr);
@@ -45,7 +45,7 @@ public class GtsParser {
 			String[] numbers = line.split(" ");
 			ArrayList<Point> points = new ArrayList<Point>();
 			ArrayList<Segment> segments = new ArrayList<Segment>();
-			ArrayList<Triangle> triangles = new ArrayList<Triangle>();
+			ArrayList<Face> triangles = new ArrayList<Face>();
 			// Recuperation des points
 			int nb = Integer.parseInt(numbers[0]);
 			for(int i = 0 ; i < nb ; i++) {
@@ -68,7 +68,7 @@ public class GtsParser {
 			for(int i = 0 ; i < nb ; i++) {
 				line = getNextLine(reader);
 				String[] trs = line.split(" ");
-				triangles.add(new Triangle(segments.get(Integer.parseInt(trs[0]) - 1), 
+				triangles.add(new Face(segments.get(Integer.parseInt(trs[0]) - 1), 
 						segments.get(Integer.parseInt(trs[1]) - 1), 
 						segments.get(Integer.parseInt(trs[2]) - 1)));
 			}
@@ -98,8 +98,8 @@ public class GtsParser {
 	 * @param model le ModelEntry depuis lequel on veut faire un VolumeModel
 	 * @return le VolumModel recupere
 	 */
-	public static VolumeModel getVolumeFromModelEntry(ModelEntry model) {
-		VolumeModel volume = new VolumeModel();
+	public static ModelVolume getVolumeFromModelEntry(ModelEntry model) {
+		ModelVolume volume = new ModelVolume();
 		try {
 			BufferedReader reader = model.getModelReader();
 			// on r�cup�re la 1�re ligne non comment�e
@@ -108,7 +108,7 @@ public class GtsParser {
 
 			ArrayList<Point> points = new ArrayList<Point>();
 			ArrayList<Segment> segments = new ArrayList<Segment>();
-			ArrayList<Triangle> triangles = new ArrayList<Triangle>();
+			ArrayList<Face> triangles = new ArrayList<Face>();
 
 			// Recuperation des points
 			points = getPoints(reader, Integer.parseInt(numbers[0]));
@@ -144,13 +144,13 @@ public class GtsParser {
 	 * @param segments
 	 * @return ArrayList <Triangle>
 	 */
-	private static ArrayList<Triangle> getTriangles(BufferedReader reader, int nbLines, ArrayList<Segment> segments) {
+	private static ArrayList<Face> getTriangles(BufferedReader reader, int nbLines, ArrayList<Segment> segments) {
 		String line = "";
-		ArrayList<Triangle> triangles = new ArrayList<Triangle>();
+		ArrayList<Face> triangles = new ArrayList<Face>();
 		for(int i = 0 ; i < nbLines ; i++) {
 			line = getNextLine(reader);
 			String[] trs = line.split(" ");
-			triangles.add(new Triangle(segments.get(Integer.parseInt(trs[0]) - 1), 
+			triangles.add(new Face(segments.get(Integer.parseInt(trs[0]) - 1), 
 					segments.get(Integer.parseInt(trs[1]) - 1), 
 					segments.get(Integer.parseInt(trs[2]) - 1)));
 		}
@@ -247,7 +247,7 @@ public class GtsParser {
 
 			ArrayList<Point> points = new ArrayList<Point>();
 			ArrayList<Segment> segments = new ArrayList<Segment>();
-			ArrayList<Triangle> triangles = new ArrayList<Triangle>();
+			ArrayList<Face> triangles = new ArrayList<Face>();
 
 			// Recuperation des points
 			points = getPoints(reader, Integer.parseInt(numbers[0]));
@@ -266,7 +266,7 @@ public class GtsParser {
 			triangles = getTriangles(reader, Integer.parseInt(numbers[2]), segments);
 			// Verification de la validite des triangles
 			if(triangles == null) return false;
-			for(Triangle t : triangles) {
+			for(Face t : triangles) {
 				if(!t.isValid()) return false;
 			}
 			

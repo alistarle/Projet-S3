@@ -5,7 +5,7 @@ package fr.minestate.modif;
  * @author scta
  *
  */
-public class Rotation extends Transformation {
+public class Rotation extends Modification {
 
 	public final static int X_AXIS = 0;
 	public final static int Y_AXIS = 1;

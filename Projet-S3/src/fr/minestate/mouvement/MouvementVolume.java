@@ -1,4 +1,4 @@
-package fr.minestate.control;
+package fr.minestate.mouvement;
 
 import java.awt.Dimension;
 import java.awt.event.MouseEvent;
@@ -9,7 +9,7 @@ import java.awt.event.MouseWheelListener;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
-import fr.minestate.models.VolumeModel;
+import fr.minestate.models.ModelVolume;
 import fr.minestate.modif.Matrix;
 import fr.minestate.modif.Rotation;
 import fr.minestate.modif.Translation;
@@ -20,14 +20,14 @@ import fr.minestate.modif.Translation;
  * @author scta
  *
  */
-public class VolumeController {
+public class MouvementVolume {
 
 	public static int previousMouseX;
 	public static int previousMouseY;
 
 	private static JComponent panel;
 	@SuppressWarnings("unused")
-	private static VolumeModel model;
+	private static ModelVolume model;
 
 	/**
 	 * Retourne le MouseMotionListener associe a un VolumeModel
@@ -36,7 +36,7 @@ public class VolumeController {
 	 *            le VolumeModel dont on veut recuperer le MouseMotionListener
 	 * @return son MouseMotionListener
 	 */
-	public static MouseMotionListener getMouseController(final VolumeModel m) {
+	public static MouseMotionListener getMouseController(final ModelVolume m) {
 		return new MouseMotionListener() {
 			@Override
 			public void mouseDragged(MouseEvent e) {
@@ -77,7 +77,7 @@ public class VolumeController {
 	 * @param m le VolumeModel dont on veut connaitre le MouseWheelListener
 	 * @return son MouseWheelListener
 	 */
-	public static MouseWheelListener getMouseWheelController(final VolumeModel m) {
+	public static MouseWheelListener getMouseWheelController(final ModelVolume m) {
 		return new MouseWheelListener() {
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
@@ -91,14 +91,14 @@ public class VolumeController {
 	 * @param panel le nouveau panel
 	 */
 	public static void setPanel(JComponent panel) {
-		VolumeController.panel = panel;
+		MouvementVolume.panel = panel;
 	}
 
 	/**
 	 * Permet de definir le meilleur zoom pour un VolumeModel
 	 * @param model le VolumeModel dont on veut connaitre le meilleur zoom possible
 	 */
-	public static void optimalZoom(VolumeModel model) {
+	public static void optimalZoom(ModelVolume model) {
 		optimalZoom(model, panel.getSize());
 	}
 
@@ -107,7 +107,7 @@ public class VolumeController {
 	 * @param model le VolumeModel dont on veut connaitre le meilleur zoom
 	 * @param d les dimensions
 	 */
-	public static void optimalZoom(VolumeModel model, Dimension d) {
+	public static void optimalZoom(ModelVolume model, Dimension d) {
 		model.optimalZoom(d);
 	}
 }
